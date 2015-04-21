@@ -1,6 +1,8 @@
-from cffi import FFI
+"""Fortran back-end of indegrator."""
+
 import os
 import numpy
+from cffi import FFI
 
 ffi = FFI()
 ffi.cdef("""
@@ -23,13 +25,15 @@ ffi.cdef("""
                                double *p, double *p_dot1, double *p_dot2, double *p_ddot,
                                double *u, double *u_dot1, double *u_dot2, double *u_ddot,
                                int *nbdirs2, int *nbdirs1);
-
 """)
 
 
 class BackendFortran(object):
 
+    """."""
+
     def __init__(self, path):
+        """."""
         self.path = os.path.abspath(path)
         self.dir  = os.path.dirname(self.path)
         # Load symbols from the current process (Python).
@@ -37,7 +41,7 @@ class BackendFortran(object):
         print('Loaded lib {0}'.format(self.lib))
 
     def ffcn(self, t, x, f, p, u):
-
+        """."""
         ffi_t = ffi.cast("double *", t.ctypes.data)
         ffi_x = ffi.cast("double *", x.ctypes.data)
         ffi_f = ffi.cast("double *", f.ctypes.data)
@@ -47,7 +51,7 @@ class BackendFortran(object):
         self.lib.ffcn_(ffi_t, ffi_x, ffi_f, ffi_p, ffi_u)
 
     def ffcn_dot(self, t, x, x_dot, f, f_dot, p, p_dot, u, u_dot):
-
+        """."""
         nbdirs = numpy.array([x_dot.shape[1]], dtype=numpy.int32)
 
         ffi_t = ffi.cast("double *", t.ctypes.data)
@@ -71,7 +75,7 @@ class BackendFortran(object):
                                ffi_nbdirs)
 
     def ffcn_bar(self, t, x, x_bar, f, f_bar, p, p_bar, u, u_bar):
-
+        """."""
         ffi_t = ffi.cast("double *", t.ctypes.data)
         ffi_x = ffi.cast("double *", x.ctypes.data)
         ffi_f = ffi.cast("double *", f.ctypes.data)
@@ -90,11 +94,11 @@ class BackendFortran(object):
                              ffi_u, ffi_u_bar)
 
     def ffcn_ddot(self, t,
-                  x, x_dot2, x_dot1, x_ddot, 
+                  x, x_dot2, x_dot1, x_ddot,
                   f, f_dot2, f_dot1, f_ddot,
                   p, p_dot2, p_dot1, p_ddot,
                   u, u_dot2, u_dot1, u_ddot):
-
+        """."""
         nbdirs1 = numpy.array([x_dot1.shape[1]], dtype=numpy.int32)
         nbdirs2 = numpy.array([x_dot2.shape[1]], dtype=numpy.int32)
 
@@ -122,9 +126,10 @@ class BackendFortran(object):
         ffi_nbdirs1 = ffi.cast("int *", nbdirs1.ctypes.data)
         ffi_nbdirs2 = ffi.cast("int *", nbdirs2.ctypes.data)
 
-        self.lib.ffcn_d_xpu_v_d_xpu_v_(ffi_t,
-                               ffi_x, ffi_x_dot2, ffi_x_dot1, ffi_x_ddot,
-                               ffi_f, ffi_f_dot2, ffi_f_dot1, ffi_f_ddot,
-                               ffi_p, ffi_p_dot2, ffi_p_dot1, ffi_p_ddot,
-                               ffi_u, ffi_u_dot2, ffi_u_dot1, ffi_u_ddot,
-                               ffi_nbdirs1, ffi_nbdirs2)
+        self.lib.ffcn_d_xpu_v_d_xpu_v_(
+            ffi_t,
+            ffi_x, ffi_x_dot2, ffi_x_dot1, ffi_x_ddot,
+            ffi_f, ffi_f_dot2, ffi_f_dot1, ffi_f_ddot,
+            ffi_p, ffi_p_dot2, ffi_p_dot1, ffi_p_ddot,
+            ffi_u, ffi_u_dot2, ffi_u_dot1, ffi_u_ddot,
+            ffi_nbdirs1, ffi_nbdirs2)

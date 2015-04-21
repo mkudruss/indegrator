@@ -47,9 +47,9 @@ def ffcn(t, x, f, p, u):
 
     mR = n1*M1 + n2*M2 +n3*M3 + n4*M4
 
-    kkat = kr1 * exp( -E/Rg  * ( 1.0/Temp - 1.0/T1 ) ) \
-         + k1  * exp( -Ekat/Rg *( 1.0/Temp - 1.0/T1 ) ) \
-         * Ckat
+    kkat= kr1 * exp( -E/Rg  * ( 1.0/Temp - 1.0/T1 ) ) \
+        + k1  * exp( -Ekat/Rg *( 1.0/Temp - 1.0/T1 ) ) \
+        * Ckat
 
     r1 = kkat * n1 * n2 / mR
 

@@ -33,7 +33,6 @@ c       control functions
         a_feed     = u(3)
         b_feed     = u(4)
 
-
 c       parameters (nature-given)
 
         kr1 = p(1) * 1.0d-2
@@ -68,6 +67,5 @@ c       computation of reaction rates
         f(3) = r1
         f(4) = 0.0d0
         f(5) = -lambda*Ckat + Ckat_feed
-
 
       end

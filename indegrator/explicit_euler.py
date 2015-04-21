@@ -1,9 +1,14 @@
+"""Implementation of explicit Euler integration scheme."""
+
 import numpy
+
 
 class ExplicitEuler(object):
 
-    def __init__(self, backend):
+    """."""
 
+    def __init__(self, backend):
+        """."""
         self.printlevel = 0
 
         self.NY  = 0           # number of differential variables y
@@ -16,7 +21,7 @@ class ExplicitEuler(object):
         self.backend = backend
 
     def zo_check(self, ts, x0, p, q):
-
+        """."""
         # set dimeions
         self.M   = ts.size              # number of time steps
         self.NQ  = self.NU*self.M*2     # number of control variables
@@ -41,6 +46,7 @@ class ExplicitEuler(object):
         self.u   = numpy.zeros(self.NU)
 
     def fo_check(self, ts, x0, x0_dot, p, p_dot, q, q_dot):
+        """."""
         self.zo_check(ts, x0, p, q)
 
         self.P = x0_dot.shape[1]
@@ -60,11 +66,11 @@ class ExplicitEuler(object):
         self.f_dot  = numpy.zeros((self.NX, self.P))
         self.u_dot  = numpy.zeros((self.NU, self.P))
 
-
     def so_check(self, ts,
                  x0, x0_dot2, x0_dot1, x0_ddot,
                  p, p_dot2, p_dot1, p_ddot,
                  q, q_dot2, q_dot1, q_ddot):
+        """."""
         self.zo_check(ts, x0, p, q)
 
         self.P1 = x0_dot1.shape[1]
@@ -117,15 +123,34 @@ class ExplicitEuler(object):
 
 
     def zo_forward(self, ts, x0, p, q):
+        """
+        Solve nominal differential equation using explicit Euler scheme.
+
+        Parameters
+        ----------
+
+        Returns
+        -------
+
+        """
+        # check if dimensions fit
         self.zo_check(ts, x0, p, q)
 
+        # store initial value
         self.xs[0, :] = x0
 
+        # integrate forward
         for i in range(self.M-1):
+            # update control discretization
             self.update_u(i)
+
+            # calculate step size
             h = self.ts[i+1] - self.ts[i]
 
+            # evaluate one-step function
             self.backend.ffcn(self.ts[i:i+1], self.xs[i, :], self.f, self.p, self.u )
+
+            # compute next state
             self.xs[i + 1, :]  = self.xs[i,:] +  h*self.f
 
     def fo_forward_xpu(self, ts, x0, x0_dot, p, p_dot, q, q_dot):
