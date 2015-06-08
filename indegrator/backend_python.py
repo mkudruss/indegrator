@@ -29,20 +29,22 @@ class BackendPython(object):
         """
         Load the provided pure Python back-end.
 
-        Where ffcn is either
+        Where ffcn is either:
 
         1) a class or an object
         2) or a path to a directory containing a python file '*.py'
 
-        providing methods of the form
-        * ``def ffcn(self, t, x, f, p, u)''
-        * ``def ffcn_dot(self, t, x, x_dot, f, f_dot, p, p_dot, u, u_dot)''
-        * ``def ffcn_bar(self, t, x, x_bar, f, f_bar, p, p_bar, u, u_bar)''
-        * ``def ffcn_ddot(self, t,''
-        * ``              x, x_dot2, x_dot1, x_ddot,''
-        * ``              f, f_dot2, f_dot1, f_ddot,''
-        * ``              p, p_dot2, p_dot1, p_ddot,''
-        * ``              u, u_dot2, u_dot1, u_ddot)''
+        providing methods of the form:
+
+        * ffcn     (self, t, x,        f,        p,        u)
+        * ffcn_dot (self, t, x, x_dot, f, f_dot, p, p_dot, u, u_dot)
+        * ffcn_bar (self, t, x, x_bar, f, f_bar, p, p_bar, u, u_bar)
+        * ffcn_ddot(self, t,
+            x, x_dot2, x_dot1, x_ddot,
+            f, f_dot2, f_dot1, f_ddot,
+            p, p_dot2, p_dot1, p_ddot,
+            u, u_dot2, u_dot1, u_ddot
+          )
         """
 
         # check if object has respective members
@@ -85,23 +87,114 @@ class BackendPython(object):
                     pass
 
     def ffcn(self, t, x, f, p, u):
-        """dummy right-hand side function."""
+        """
+        Dummy right-hand side function.
+
+        Parameters
+        ----------
+        t : scalar
+            current time for evaluation
+        x : array-like (NX)
+            current differential states of the system
+        p : array-like ()
+            current parameters of the system
+        u : array-like ()
+            current control input of the system
+
+        Returns
+        -------
+        f : array-like (NX)
+            evaluated right-hand side function
+        """
         raise NotImplementedError
 
     def ffcn_dot(self, t, x, x_dot, f, f_dot, p, p_dot, u, u_dot):
-        """dummy forward derivative of right-hand side function."""
+        """
+        Dummy forward derivative of right-hand side function.
+
+        Parameters
+        ----------
+        t : scalar
+            current time for evaluation
+        x : array-like (NX)
+            current differential states of the system
+        x_dot1 : array-like (,)
+        p : array-like ()
+            current parameters of the system
+        p_dot1 : array-like (,)
+        u : array-like ()
+            current control input of the system
+        u_dot1 : array-like (,)
+
+        Returns
+        -------
+        f : array-like (NX)
+            evaluated right-hand side function
+        f_dot1 : array-like (,)
+        """
         raise NotImplementedError
 
     def ffcn_bar(self, t, x, x_bar, f, f_bar, p, p_bar, u, u_bar):
-        """dummy reverse derivative of right-hand side function."""
+        """
+        Dummy reverse derivative of right-hand side function.
+
+        Parameters
+        ----------
+        t : scalar
+            current time for evaluation
+        x : array-like (NX)
+            current differential states of the system
+        x_bar : array-like (,)
+        p : array-like ()
+            current parameters of the system
+        p_bar : array-like (,)
+        u : array-like ()
+            current control input of the system
+        u_bar : array-like (,)
+
+        Returns
+        -------
+        f : array-like (NX)
+            evaluated right-hand side function
+        f_bar : array-like (,)
+        """
         raise NotImplementedError
 
     def ffcn_ddot(self, t,
                   x, x_dot2, x_dot1, x_ddot,
                   f, f_dot2, f_dot1, f_ddot,
                   p, p_dot2, p_dot1, p_ddot,
-                  u, u_dot2, u_dot1, u_ddot):
+                  u, u_dot2, u_dot1, u_ddot
+                  ):
         """
-        dummy second order forward derivative of right-hand side function.
+        Dummy second order forward derivative of right-hand side function.
+
+        Parameters
+        ----------
+        t : scalar
+            current time for evaluation
+        x : array-like (NX)
+            current differential states of the system
+        x_dot2 : array-like (,)
+        x_dot1 : array-like (,)
+        x_ddot : array-like (,)
+        p : array-like ()
+            current parameters of the system
+        p_dot2 : array-like (,)
+        p_dot1 : array-like (,)
+        p_ddot : array-like (,)
+        u : array-like ()
+            current control input of the system
+        u_dot2 : array-like (,)
+        u_dot1 : array-like (,)
+        u_ddot : array-like (,)
+
+        Returns
+        -------
+        f : array-like (NX)
+            evaluated right-hand side function
+        f_dot2 : array-like (,)
+        f_dot1 : array-like (,)
+        f_ddot : array-like (,)
         """
         raise NotImplementedError

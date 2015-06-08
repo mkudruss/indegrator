@@ -11,7 +11,8 @@ Licence:
     * <YEAR> = 2008-2009
     * <OWNER> = Sebastian F. Walter, sebastian.walter@gmail.com
     * <ORGANIZATION> = Heidelberg University
-    * In addition, "Neither the name of the contributors' organizations" was changed to "Neither the names of the contributors' organizations"
+    * In addition, "Neither the name of the contributors' organizations" was
+      changed to "Neither the names of the contributors' organizations"
 
 
 Copyright (c) 2014 Sebastian F. Walter
